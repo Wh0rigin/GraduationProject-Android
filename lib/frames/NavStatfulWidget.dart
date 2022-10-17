@@ -1,5 +1,7 @@
+import 'package:flutter/gestures.dart';
 import "package:flutter/material.dart";
-import 'package:graduation_project/BookWidget.dart';
+import 'package:graduation_project/pages/SensorPage.dart';
+import '../pages/BookPage.dart';
 
 class NavStatfulWidget extends StatefulWidget {
   const NavStatfulWidget({super.key});
@@ -18,11 +20,8 @@ class _NavStatfulWidgetState extends State<NavStatfulWidget> {
       'Index 0: Home',
       style: optionStyle,
     ),
-    const BookWidget(),
-    const Text(
-      'Index 2: Sensor',
-      style: optionStyle,
-    ),
+    const BookPage(),
+    const SensorPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -38,6 +37,39 @@ class _NavStatfulWidgetState extends State<NavStatfulWidget> {
         title: const Text(_title),
         centerTitle: true,
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: const <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.amber,
+              ),
+              child: Text(
+                'Drawer Header',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.message),
+              title: Text('Messages'),
+            ),
+            ListTile(
+              leading: Icon(Icons.account_circle),
+              title: Text('Profile'),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+            ),
+          ],
+        ),
+      ),
+      drawerDragStartBehavior: DragStartBehavior.start,
+      primary: true,
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
