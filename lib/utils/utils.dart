@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Utils {
+  static bool isNumeric(String s) {
+    if (double.tryParse(s) == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   static Color stringToColor(String source) {
     return Color(int.parse(source, radix: 16) | 0xFF000000);
   }

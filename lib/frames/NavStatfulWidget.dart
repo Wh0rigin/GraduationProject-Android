@@ -106,6 +106,7 @@ class _NavStatfulWidgetState extends State<NavStatfulWidget> {
                     // onConfirm: () => print("Ok"),
                     title: "Setting",
                     content: Switch(
+
                         // This bool value toggles the switch.
                         value: isDarkMode,
                         activeColor: Colors.blue,
