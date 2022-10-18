@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import "package:flutter/material.dart";
+import 'package:graduation_project/pages/LoginPages.dart';
 import 'package:graduation_project/pages/SensorPage.dart';
 import '../pages/BookPage.dart';
+import 'package:get/get.dart';
 
 class NavStatfulWidget extends StatefulWidget {
   const NavStatfulWidget({super.key});
@@ -40,31 +42,35 @@ class _NavStatfulWidgetState extends State<NavStatfulWidget> {
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: const <Widget>[
-            DrawerHeader(
+          children: <Widget>[
+            const DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.amber,
               ),
               child: Text(
-                'Drawer Header',
+                'User',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                 ),
               ),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.message),
               title: Text('Messages'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.account_circle),
               title: Text('Profile'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.settings),
               title: Text('Settings'),
             ),
+            ListTile(
+                leading: const Icon(Icons.exit_to_app),
+                title: const Text("Log out"),
+                onTap: () => Get.off(const LoginPage()))
           ],
         ),
       ),

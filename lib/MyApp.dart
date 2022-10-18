@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
+import 'package:graduation_project/pages/LoginPages.dart';
 
-import 'frames/NavStatfulWidget.dart';
 import "package:flutter/material.dart";
 
 class MyApp extends StatelessWidget {
@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
         title: _title,
         color: Colors.white,
         theme: ThemeData(primarySwatch: Colors.amber),
-        darkTheme: ThemeData(primarySwatch: Colors.grey),
+        darkTheme: ThemeData(primarySwatch: Colors.brown),
         debugShowCheckedModeBanner: false,
-        home: const NavStatfulWidget());
+        home: const LoginPage());
   }
 }
