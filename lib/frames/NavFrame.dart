@@ -3,8 +3,8 @@ import "package:flutter/material.dart";
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:graduation_project/components/MDrawer.dart';
-import 'package:graduation_project/pages/SensorPage.dart';
-import '../pages/BookPage.dart';
+import 'package:graduation_project/pages/main/SensorPage.dart';
+import '../pages/main/BookPage.dart';
 
 class NavFrame extends StatefulWidget {
   const NavFrame({super.key});
@@ -92,8 +92,4 @@ class _NavFrameState extends State<NavFrame> {
       ),
     );
   }
-}
-
-_textSnackBar(Map val) {
-  return val == null ? const Text("null") : Text(val["status"].toString());
 }

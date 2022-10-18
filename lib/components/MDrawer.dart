@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:graduation_project/router/AppRoutes.dart';
 
 import '../common/assets.dart';
-import '../pages/LoginPages.dart';
 
 class MDrawer extends StatefulWidget {
   const MDrawer({super.key});
@@ -27,7 +27,7 @@ class _MDrawerState extends State<MDrawer> {
                       end: Alignment.bottomLeft, //左下
                       stops: [0.0, 1.0], //[渐变起始点, 渐变结束点]
                       //渐变颜色[始点颜色, 结束颜色]
-                      colors: [Colors.amber, Colors.yellow])),
+                      colors: [Colors.orange, Colors.yellow])),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -102,7 +102,7 @@ class _MDrawerState extends State<MDrawer> {
           ListTile(
               leading: const Icon(Icons.exit_to_app),
               title: const Text("Log out"),
-              onTap: () => Get.off(const LoginPage()))
+              onTap: () => Get.offAllNamed(AppRoutes.LoginPages))
         ],
       ),
     );

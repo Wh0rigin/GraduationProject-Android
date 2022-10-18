@@ -1,9 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Response;
+import 'package:graduation_project/api/authApi.dart';
 import 'package:graduation_project/frames/NavFrame.dart';
 
-import '../utils/utils.dart';
+import '../../utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,13 +15,19 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Duration get loginTime => const Duration(milliseconds: 2250);
+  var dio = Dio();
+
+  Duration get loginTime => const Duration(milliseconds: 1000);
   Future<String?> _authUser(LoginData data) {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
-
+    // debugPrint(AuthApi.authLogin(data.name, data.password));
+    // TestApi.posttest422("123")
+    //     .then((value) => debugPrint('POST:${value.data}'));
+    AuthApi.authLogin(data.name, data.password)
+        .then((value) => debugPrint('POST:${value.data}'));
     return Future.delayed(loginTime).then((_) {
       //return non-null string faild
-
+      // debugPrint(response.statusCode.toString());
       //null success
       return null;
     });
@@ -122,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
       userType: LoginUserType.phone,
       hideForgotPasswordButton: true,
       onSubmitAnimationCompleted: () {
-        Get.to(const NavFrame(), arguments: {"status": "success"});
+        Get.offAll(const NavFrame(), arguments: {"status": "success"});
       },
       userValidator: checkTelephone,
       passwordValidator: checkPassword,
