@@ -5,14 +5,15 @@ import 'package:graduation_project/router/AppRoutes.dart';
 import '../common/assets.dart';
 
 class MDrawer extends StatefulWidget {
-  const MDrawer({super.key});
-
+  const MDrawer({super.key, required this.telephone});
+  final String telephone;
   @override
   State<MDrawer> createState() => _MDrawerState();
 }
 
 class _MDrawerState extends State<MDrawer> {
   bool isDarkMode = false;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -51,9 +52,9 @@ class _MDrawerState extends State<MDrawer> {
                   const SizedBox(
                     height: 5,
                   ),
-                  const Text(
-                    '123456689',
-                    style: TextStyle(
+                  Text(
+                    widget.telephone,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 24,
                     ),

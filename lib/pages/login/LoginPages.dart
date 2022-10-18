@@ -1,10 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:get/get.dart' hide Response;
+import 'package:get/get.dart';
 import 'package:graduation_project/api/authApi.dart';
-import 'package:graduation_project/frames/NavFrame.dart';
 
+import '../../frames/NavFrame.dart';
 import '../../utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,21 +14,56 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var dio = Dio();
-
+  Map? request;
   Duration get loginTime => const Duration(milliseconds: 1000);
-  Future<String?> _authUser(LoginData data) {
+  Future<String?> _authLogin(LoginData data) async {
+    Map<String, dynamic>? callback;
     debugPrint('Name: ${data.name}, Password: ${data.password}');
     // debugPrint(AuthApi.authLogin(data.name, data.password));
     // TestApi.posttest422("123")
     //     .then((value) => debugPrint('POST:${value.data}'));
-    AuthApi.authLogin(data.name, data.password)
-        .then((value) => debugPrint('POST:${value.data}'));
+    await AuthApi.authLogin(data.name, data.password)
+        .then((value) => callback = value.data as Map<String, dynamic>);
     return Future.delayed(loginTime).then((_) {
-      //return non-null string faild
+      // return non-null string faild
       // debugPrint(response.statusCode.toString());
+
       //null success
-      return null;
+      if (callback == null) {
+        return "服务器错误";
+      }
+      switch (callback!["code"]) {
+        case 200:
+          request = callback;
+          return null;
+        case 422:
+          return "登录失败请检查账号密码是否正确";
+        case 500:
+          return "服务器错误";
+      }
+      return "发生未知错误,请联系管理员";
+    });
+  }
+
+  Future<String?> _authRegister(SignupData data) async {
+    Map<String, dynamic>? callback;
+    debugPrint('Name: ${data.name}, Password: ${data.password}');
+    await AuthApi.authRegister(data.name!, data.password!)
+        .then((value) => {callback = value.data as Map<String, dynamic>?});
+    return Future.delayed(loginTime).then((_) {
+      if (callback == null) {
+        return "服务器错误";
+      }
+      switch (callback!["code"]) {
+        case 200:
+          request = callback;
+          return null;
+        case 422:
+          return "用户名已存在";
+        case 500:
+          return "服务器错误";
+      }
+      return "发生未知错误,请联系管理员";
     });
   }
 
@@ -124,13 +158,13 @@ class _LoginPageState extends State<LoginPage> {
     //       )),
     // );
     return FlutterLogin(
-      onLogin: _authUser,
+      onLogin: _authLogin,
       onRecoverPassword: _recoverPassword,
-      onSignup: (_) => Future(() => null),
+      onSignup: _authRegister,
       userType: LoginUserType.phone,
       hideForgotPasswordButton: true,
       onSubmitAnimationCompleted: () {
-        Get.offAll(const NavFrame(), arguments: {"status": "success"});
+        Get.offAll(const NavFrame(), arguments: request!);
       },
       userValidator: checkTelephone,
       passwordValidator: checkPassword,

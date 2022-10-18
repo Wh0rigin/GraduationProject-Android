@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 
+import '../config/Configs.dart';
+
 class AuthApi {
   static Future<Response> authLogin(String account, String password) async {
     Response response;
@@ -7,8 +9,27 @@ class AuthApi {
       'account': account,
       'password': password,
     });
-    response = await Dio()
-        .post('http://172.20.21.97:8080/api/auth/login', data: formData);
+    print("Post->http://${Configs.host}:${Configs.port}/api/auth/login");
+    response = await Dio().post(
+        'http://${Configs.host}:${Configs.port}/api/auth/login',
+        data: formData);
+
+    return response;
+  }
+
+  static Future<Response> authRegister(
+      String telephone, String password) async {
+    Response response;
+    var formData = FormData.fromMap({
+      'name': telephone,
+      'telephone': telephone,
+      'password': password,
+    });
+    print("Post->http://${Configs.host}:${Configs.port}/api/auth/register");
+    response = await Dio().post(
+        'http://${Configs.host}:${Configs.port}/api/auth/register',
+        data: formData);
+
     return response;
   }
 

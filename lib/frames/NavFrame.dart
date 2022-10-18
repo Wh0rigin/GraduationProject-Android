@@ -42,7 +42,7 @@ class _NavFrameState extends State<NavFrame> {
         title: const Text(_title),
         centerTitle: true,
       ),
-      drawer: const MDrawer(),
+      drawer: MDrawer(telephone: detail["data"]["username"].toString()),
       drawerDragStartBehavior: DragStartBehavior.start,
       primary: true,
       body: Center(
@@ -60,7 +60,7 @@ class _NavFrameState extends State<NavFrame> {
                   return ElevatedButton(
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(detail["status"])));
+                            SnackBar(content: Text(detail["data"].toString())));
                       },
                       child: const Text("获取的map"));
                 },

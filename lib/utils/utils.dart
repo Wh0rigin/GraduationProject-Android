@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:yaml/yaml.dart';
 
 class Utils {
   static bool isNumeric(String s) {
@@ -7,6 +10,20 @@ class Utils {
     } else {
       return true;
     }
+  }
+
+  static Future<Map> readConfig() async {
+    String content = "";
+    File file = File('../config/config.yaml');
+
+    try {
+      content = await file.readAsString();
+    } catch (e) {
+      print(e);
+    }
+    var doc = loadYaml(content);
+
+    return {"host": doc["host"], "port": doc["port"]};
   }
 
   static Color stringToColor(String source) {
