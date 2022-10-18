@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
+import 'package:graduation_project/frames/NavFrame.dart';
 
-import '../frames/NavStatfulWidget.dart';
 import '../utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,14 +13,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  static const String _title = "图书管理系统";
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
   Duration get loginTime => const Duration(milliseconds: 2250);
   Future<String?> _authUser(LoginData data) {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
 
     return Future.delayed(loginTime).then((_) {
+      //return non-null string faild
+
+      //null success
       return null;
     });
   }
@@ -122,9 +122,10 @@ class _LoginPageState extends State<LoginPage> {
       userType: LoginUserType.phone,
       hideForgotPasswordButton: true,
       onSubmitAnimationCompleted: () {
-        Get.to(const NavStatfulWidget());
+        Get.to(const NavFrame(), arguments: {"status": "success"});
       },
       userValidator: checkTelephone,
+      passwordValidator: checkPassword,
     );
   }
 }
