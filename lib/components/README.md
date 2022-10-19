@@ -1,0 +1,1 @@
+若flutter的setState()失效，可能是children:使用数组时，没有进行并集操作

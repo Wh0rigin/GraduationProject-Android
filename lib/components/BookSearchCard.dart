@@ -1,7 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../api/BookApi.dart';
 
 class BookSearchCard extends StatefulWidget {
   const BookSearchCard(
@@ -14,7 +14,16 @@ class BookSearchCard extends StatefulWidget {
 }
 
 class _BookSearchCardState extends State<BookSearchCard> {
-  String searchText = "";
+  Timer? _timer;
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -30,11 +39,20 @@ class _BookSearchCardState extends State<BookSearchCard> {
             // container
             Padding(
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                child: CupertinoSearchTextField(onChanged: (value) async {
-                  searchText = value;
-                  await BookApi.getBookByIsbn(searchText, widget.token)
-                      .then((value) {
-                    debugPrint(value.data);
+                child: CupertinoSearchTextField(onChanged: (value) {
+                  int countdownTime = 0;
+                  const oneSec = Duration(seconds: 1);
+                  if (_timer != null) {
+                    // debugPrint('time.cancel');
+                    _timer!.cancel();
+                  }
+                  _timer = Timer.periodic(oneSec, (timer) {
+                    countdownTime++;
+                    if (countdownTime >= 3) {
+                      widget.fieldValue(value);
+                      countdownTime = 0;
+                      _timer!.cancel();
+                    }
                   });
                 })),
 
