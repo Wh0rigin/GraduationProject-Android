@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 import '../config/Configs.dart';
 
@@ -9,7 +10,7 @@ class AuthApi {
       'account': account,
       'password': password,
     });
-    print("Post->http://${Configs.host}:${Configs.port}/api/auth/login");
+    debugPrint("Post->http://${Configs.host}:${Configs.port}/api/auth/login");
     response = await Dio().post(
         'http://${Configs.host}:${Configs.port}/api/auth/login',
         data: formData);

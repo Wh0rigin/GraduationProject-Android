@@ -23,11 +23,9 @@ class _MDrawerState extends State<MDrawer> {
           DrawerHeader(
               decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                      //渐变位置
-                      begin: Alignment.topRight, //右上
-                      end: Alignment.bottomLeft, //左下
-                      stops: [0.0, 1.0], //[渐变起始点, 渐变结束点]
-                      //渐变颜色[始点颜色, 结束颜色]
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                      stops: [0.0, 1.0],
                       colors: [Colors.orange, Colors.yellow])),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

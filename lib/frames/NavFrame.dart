@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:graduation_project/components/MDrawer.dart';
+import 'package:graduation_project/pages/main/HomePage.dart';
 import 'package:graduation_project/pages/main/SensorPage.dart';
 import '../pages/main/BookPage.dart';
 
@@ -25,6 +26,8 @@ class _NavFrameState extends State<NavFrame> {
     });
   }
 
+  String token = "";
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +39,9 @@ class _NavFrameState extends State<NavFrame> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("FavFrmae reflush");
     final detail = Get.arguments as Map;
+    debugPrint("detail:$detail");
     return Scaffold(
       appBar: AppBar(
         title: const Text(_title),
@@ -47,28 +52,11 @@ class _NavFrameState extends State<NavFrame> {
       primary: true,
       body: Center(
         child: <Widget>[
-          Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Index 0: Home',
-                style: optionStyle,
-              ),
-              StatefulBuilder(
-                builder: (BuildContext context, setState) {
-                  return ElevatedButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(detail["data"].toString())));
-                      },
-                      child: const Text("获取的map"));
-                },
-              ),
-            ],
-          )),
+          HomePage(name: detail["data"]["username"].toString()),
           const BookPage(),
-          const SensorPage(),
+          SensorPage(
+            token: detail["data"]["AccessToken"],
+          ),
         ].elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
