@@ -88,11 +88,14 @@ class _SensorPageState extends State<SensorPage> {
                         children: [
                           TextField(
                             decoration: const InputDecoration(
-                                labelText: "传感器名称",
-                                hintText: "请输入传感器名称",
-                                prefixIcon: Icon(Icons.sensors),
-                                suffixIcon: Icon(Icons.edit),
-                                border: OutlineInputBorder()),
+                              labelText: "传感器名称",
+                              hintText: "请输入传感器名称",
+                              prefixIcon: Icon(Icons.sensors),
+                              suffixIcon: Icon(Icons.edit),
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30))),
+                            ),
                             onChanged: (value) =>
                                 {sensorName = value.toString()},
                           ),
@@ -105,14 +108,14 @@ class _SensorPageState extends State<SensorPage> {
                                 hintText: "请输入数据单位",
                                 prefixIcon: Icon(Icons.percent),
                                 suffixIcon: Icon(Icons.edit),
-                                border: OutlineInputBorder()),
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(30)))),
                             onChanged: (value) =>
                                 {sensorUnit = value.toString()},
                           ),
                         ])),
               ).whenComplete(() {
-                setState(() {});
-              }).catchError(() {
                 setState(() {});
               });
             });
