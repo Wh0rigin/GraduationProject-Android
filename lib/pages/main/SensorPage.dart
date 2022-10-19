@@ -18,10 +18,12 @@ class _SensorPageState extends State<SensorPage> {
   @override
   void initState() {
     super.initState();
-    if (sensorCards.isEmpty) {
+    if (sensorCards.isEmpty && actuatorCards.isEmpty) {
       sensorCards.addAll([
         const RefreshCard(),
         SensorCard(sensorName: "temperature", token: widget.token, unit: "℃"),
+      ]);
+      actuatorCards.addAll([
         const ActuatorCard(),
       ]);
     }
@@ -44,9 +46,12 @@ class _SensorPageState extends State<SensorPage> {
   }
 
   static var sensorCards = <Widget>[];
+  static var actuatorCards = <Widget>[];
   String sensorName = "";
   String sensorUnit = "";
 
+  final TextEditingController _editingNameController = TextEditingController();
+  final TextEditingController _editingUnitController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     debugPrint("SensorPages reflush");
@@ -55,7 +60,7 @@ class _SensorPageState extends State<SensorPage> {
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: ListView(
-            children: sensorCards,
+            children: sensorCards + actuatorCards,
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -79,14 +84,17 @@ class _SensorPageState extends State<SensorPage> {
                       Get.snackbar("添加成功 ", sensorName);
                       sensorName = "";
                       sensorUnit = "";
+                      _editingNameController.clear();
+                      _editingUnitController.clear();
                     },
-                    child: const Text("Ok")),
+                    child: const Text("OK")),
                 content: Padding(
                     padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextField(
+                            controller: _editingNameController,
                             decoration: const InputDecoration(
                               labelText: "传感器名称",
                               hintText: "请输入传感器名称",
@@ -103,6 +111,7 @@ class _SensorPageState extends State<SensorPage> {
                             height: 10,
                           ),
                           TextField(
+                            controller: _editingUnitController,
                             decoration: const InputDecoration(
                                 labelText: "数据单位",
                                 hintText: "请输入数据单位",
