@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
+import '../../components/ActuatorCard.dart';
+import '../../components/RefreshCard.dart';
 import '../../components/SensorCard.dart';
 
 class SensorPage extends StatefulWidget {
@@ -16,6 +18,13 @@ class _SensorPageState extends State<SensorPage> {
   @override
   void initState() {
     super.initState();
+    if (sensorCards.isEmpty) {
+      sensorCards.addAll([
+        const RefreshCard(),
+        SensorCard(sensorName: "temperature", token: widget.token, unit: "℃"),
+        const ActuatorCard(),
+      ]);
+    }
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       // ScaffoldMessenger.of(context)
       //     .showSnackBar(SnackBar(content: Text(widget.token)));
@@ -51,58 +60,62 @@ class _SensorPageState extends State<SensorPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Get.defaultDialog(
-              title: "添加临时传感器",
-              confirm:
-                  StatefulBuilder(builder: (BuildContext context, setState) {
-                return ElevatedButton(
+            setState(() {
+              Get.defaultDialog(
+                title: "添加临时传感器",
+                confirm: ElevatedButton(
                     onPressed: () {
                       if (sensorName == "") {
                         Get.snackbar("添加失败,名称不能为空", sensorName);
                         return;
                       }
-                      setState(() {
-                        addSensor(widget.token, sensorName, sensorUnit);
-                        // sensorCards.add(SensorCard(
-                        //   token: widget.token,
-                        //   sensorName: sensorName,
-                        //   unit: sensorUnit,
-                        // ));
-                      });
-                      Get.snackbar("添加成功", sensorName);
+                      // addSensor(widget.token, sensorName, sensorUnit);
+                      sensorCards.add(SensorCard(
+                        token: widget.token,
+                        sensorName: sensorName,
+                        unit: sensorUnit,
+                      ));
+
+                      Get.snackbar("添加成功 ", sensorName);
                       sensorName = "";
                       sensorUnit = "";
                     },
-                    child: const Text("Ok"));
-              }),
-              content: Padding(
-                  padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextField(
-                          decoration: const InputDecoration(
-                              labelText: "传感器名称",
-                              hintText: "请输入传感器名称",
-                              prefixIcon: Icon(Icons.sensors),
-                              suffixIcon: Icon(Icons.edit),
-                              border: OutlineInputBorder()),
-                          onChanged: (value) => {sensorName = value.toString()},
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                          decoration: const InputDecoration(
-                              labelText: "数据单位",
-                              hintText: "请输入数据单位",
-                              prefixIcon: Icon(Icons.percent),
-                              suffixIcon: Icon(Icons.edit),
-                              border: OutlineInputBorder()),
-                          onChanged: (value) => {sensorUnit = value.toString()},
-                        ),
-                      ])),
-            );
+                    child: const Text("Ok")),
+                content: Padding(
+                    padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextField(
+                            decoration: const InputDecoration(
+                                labelText: "传感器名称",
+                                hintText: "请输入传感器名称",
+                                prefixIcon: Icon(Icons.sensors),
+                                suffixIcon: Icon(Icons.edit),
+                                border: OutlineInputBorder()),
+                            onChanged: (value) =>
+                                {sensorName = value.toString()},
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextField(
+                            decoration: const InputDecoration(
+                                labelText: "数据单位",
+                                hintText: "请输入数据单位",
+                                prefixIcon: Icon(Icons.percent),
+                                suffixIcon: Icon(Icons.edit),
+                                border: OutlineInputBorder()),
+                            onChanged: (value) =>
+                                {sensorUnit = value.toString()},
+                          ),
+                        ])),
+              ).whenComplete(() {
+                setState(() {});
+              }).catchError(() {
+                setState(() {});
+              });
+            });
           },
           backgroundColor: Colors.orange,
           child: const Icon(Icons.add),
