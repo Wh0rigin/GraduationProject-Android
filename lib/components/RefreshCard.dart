@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class RefreshCard extends StatefulWidget {
-  const RefreshCard({super.key});
+  const RefreshCard({super.key, required this.name});
+
+  final String name;
 
   @override
   State<RefreshCard> createState() => _RefreshCardState();
@@ -15,10 +17,10 @@ class _RefreshCardState extends State<RefreshCard> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const ListTile(
-              leading: Icon(Icons.refresh_outlined),
-              title: Text('Refresh'),
-              subtitle: Text('刷新你的设备列表,若设备没有出现'),
+            ListTile(
+              leading: const Icon(Icons.refresh_outlined),
+              title: const Text('Refresh'),
+              subtitle: Text('刷新你的${widget.name}列表,若${widget.name}没有出现'),
             ),
             TextButton(
               child: const Text(

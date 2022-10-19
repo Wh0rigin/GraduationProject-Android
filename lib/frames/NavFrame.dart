@@ -39,9 +39,9 @@ class _NavFrameState extends State<NavFrame> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("FavFrmae reflush");
+    // debugPrint("FavFrmae reflush");
     final detail = Get.arguments as Map;
-    debugPrint("detail:$detail");
+    // debugPrint("detail:$detail");
     return Scaffold(
       appBar: AppBar(
         title: const Text(_title),
@@ -53,7 +53,9 @@ class _NavFrameState extends State<NavFrame> {
       body: Center(
         child: <Widget>[
           HomePage(name: detail["data"]["username"].toString()),
-          const BookPage(),
+          BookPage(
+            token: detail["data"]["AccessToken"],
+          ),
           SensorPage(
             token: detail["data"]["AccessToken"],
           ),

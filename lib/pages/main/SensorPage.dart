@@ -15,16 +15,28 @@ class SensorPage extends StatefulWidget {
 }
 
 class _SensorPageState extends State<SensorPage> {
+  static var sensorCards = <Widget>[];
+  static var actuatorCards = <Widget>[];
+  String sensorName = "";
+  String sensorUnit = "";
+  final TextEditingController _editingNameController = TextEditingController();
+  final TextEditingController _editingUnitController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     if (sensorCards.isEmpty && actuatorCards.isEmpty) {
       sensorCards.addAll([
-        const RefreshCard(),
+        const RefreshCard(
+          name: "设备",
+        ),
         SensorCard(sensorName: "temperature", token: widget.token, unit: "℃"),
       ]);
       actuatorCards.addAll([
-        const ActuatorCard(),
+        ActuatorCard(
+          actuatorName: "lamp",
+          token: widget.token,
+        ),
       ]);
     }
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
@@ -45,17 +57,10 @@ class _SensorPageState extends State<SensorPage> {
     }
   }
 
-  static var sensorCards = <Widget>[];
-  static var actuatorCards = <Widget>[];
-  String sensorName = "";
-  String sensorUnit = "";
-
-  final TextEditingController _editingNameController = TextEditingController();
-  final TextEditingController _editingUnitController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    debugPrint("SensorPages reflush");
-    debugPrint(sensorCards.toString());
+    // debugPrint("SensorPages reflush");
+    // debugPrint(sensorCards.toString());
     return Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(10),

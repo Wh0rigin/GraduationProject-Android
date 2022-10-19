@@ -26,7 +26,8 @@ class AuthApi {
       'telephone': telephone,
       'password': password,
     });
-    print("Post->http://${Configs.host}:${Configs.port}/api/auth/register");
+    debugPrint(
+        "Post->http://${Configs.host}:${Configs.port}/api/auth/register");
     response = await Dio().post(
         'http://${Configs.host}:${Configs.port}/api/auth/register',
         data: formData);
