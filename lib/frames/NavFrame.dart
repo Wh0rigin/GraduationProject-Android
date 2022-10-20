@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/gestures.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/scheduler.dart';
@@ -5,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:graduation_project/components/Drawer/MDrawer.dart';
 import 'package:graduation_project/pages/main/HomePage.dart';
 import 'package:graduation_project/pages/main/SensorPage.dart';
+import 'package:graduation_project/utils/utils.dart';
 import '../pages/main/BookPage.dart';
 
 class NavFrame extends StatefulWidget {
@@ -61,24 +63,16 @@ class _NavFrameState extends State<NavFrame> {
           ),
         ].elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Book',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.sensors),
-            label: 'Sensor',
-          ),
+      bottomNavigationBar: CurvedNavigationBar(
+        items: const <Icon>[
+          Icon(Icons.home),
+          Icon(Icons.book),
+          Icon(Icons.sensors)
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
+        backgroundColor: Utils.stringToColor("fcf7ea"),
+        animationCurve: Curves.easeIn,
+        height: 50,
       ),
     );
   }

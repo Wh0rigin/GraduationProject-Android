@@ -1,6 +1,8 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:graduation_project/utils/utils.dart';
 
 import '../../components/IotWidgets/ActuatorCard.dart';
 import '../../components/RefreshCard.dart';
@@ -62,6 +64,7 @@ class _SensorPageState extends State<SensorPage> {
     // debugPrint("SensorPages reflush");
     // debugPrint(sensorCards.toString());
     return Scaffold(
+        backgroundColor: Utils.stringToColor("fcf7ea"),
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: ListView(
@@ -71,29 +74,18 @@ class _SensorPageState extends State<SensorPage> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             setState(() {
-              Get.defaultDialog(
-                title: "添加临时传感器",
-                confirm: ElevatedButton(
-                    onPressed: () {
-                      if (sensorName == "") {
-                        Get.snackbar("添加失败,名称不能为空", sensorName);
-                        return;
-                      }
-                      // addSensor(widget.token, sensorName, sensorUnit);
-                      sensorCards.add(SensorCard(
-                        token: widget.token,
-                        sensorName: sensorName,
-                        unit: sensorUnit,
-                      ));
-
-                      Get.snackbar("添加成功 ", sensorName);
-                      sensorName = "";
-                      sensorUnit = "";
-                      _editingNameController.clear();
-                      _editingUnitController.clear();
-                    },
-                    child: const Text("OK")),
-                content: Padding(
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.info,
+                headerAnimationLoop: false,
+                animType: AnimType.scale,
+                showCloseIcon: true,
+                title: "添加传感器",
+                closeIcon: const Icon(Icons.close_fullscreen_outlined),
+                onDismissCallback: (type) {
+                  debugPrint('Dialog Dissmiss from callback $type');
+                },
+                body: Padding(
                     padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -129,12 +121,92 @@ class _SensorPageState extends State<SensorPage> {
                                 {sensorUnit = value.toString()},
                           ),
                         ])),
-              ).whenComplete(() {
-                setState(() {});
-              });
+                btnOkText: '添加',
+                btnOkOnPress: () {
+                  if (sensorName == "") {
+                    Get.snackbar("添加失败,名称不能为空", sensorName);
+                    return;
+                  }
+                  // addSensor(widget.token, sensorName, sensorUnit);
+                  sensorCards.add(SensorCard(
+                    token: widget.token,
+                    sensorName: sensorName,
+                    unit: sensorUnit,
+                  ));
+
+                  Get.snackbar("添加成功 ", sensorName);
+                  sensorName = "";
+                  sensorUnit = "";
+                  _editingNameController.clear();
+                  _editingUnitController.clear();
+                  setState(() {});
+                },
+              ).show();
+
+              // Get.defaultDialog(
+              //   title: "添加临时传感器",
+              //   confirm: ElevatedButton(
+              //       onPressed: () {
+              //         if (sensorName == "") {
+              //           Get.snackbar("添加失败,名称不能为空", sensorName);
+              //           return;
+              //         }
+              //         // addSensor(widget.token, sensorName, sensorUnit);
+              //         sensorCards.add(SensorCard(
+              //           token: widget.token,
+              //           sensorName: sensorName,
+              //           unit: sensorUnit,
+              //         ));
+
+              //         Get.snackbar("添加成功 ", sensorName);
+              //         sensorName = "";
+              //         sensorUnit = "";
+              //         _editingNameController.clear();
+              //         _editingUnitController.clear();
+              //       },
+              //       child: const Text("OK")),
+              //   content: Padding(
+              //       padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+              //       child: Column(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           children: [
+              //             TextField(
+              //               controller: _editingNameController,
+              //               decoration: const InputDecoration(
+              //                 labelText: "传感器名称",
+              //                 hintText: "请输入传感器名称",
+              //                 prefixIcon: Icon(Icons.sensors),
+              //                 suffixIcon: Icon(Icons.edit),
+              //                 border: OutlineInputBorder(
+              //                     borderRadius:
+              //                         BorderRadius.all(Radius.circular(30))),
+              //               ),
+              //               onChanged: (value) =>
+              //                   {sensorName = value.toString()},
+              //             ),
+              //             const SizedBox(
+              //               height: 10,
+              //             ),
+              //             TextField(
+              //               controller: _editingUnitController,
+              //               decoration: const InputDecoration(
+              //                   labelText: "数据单位",
+              //                   hintText: "请输入数据单位",
+              //                   prefixIcon: Icon(Icons.percent),
+              //                   suffixIcon: Icon(Icons.edit),
+              //                   border: OutlineInputBorder(
+              //                       borderRadius:
+              //                           BorderRadius.all(Radius.circular(30)))),
+              //               onChanged: (value) =>
+              //                   {sensorUnit = value.toString()},
+              //             ),
+              //           ])),
+              // ).whenComplete(() {
+              //   setState(() {});
+              // });
             });
           },
-          backgroundColor: Colors.orange,
+          backgroundColor: Colors.orange.shade400,
           child: const Icon(Icons.add),
         ));
   }

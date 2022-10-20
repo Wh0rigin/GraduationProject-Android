@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
@@ -73,253 +74,472 @@ class _BookCardState extends State<BookCard> {
               padding: const EdgeInsets.all(10),
               child: TextButton(
                 onPressed: () {
-                  Get.defaultDialog(
-                      title: '书本详情',
-                      middleText: "点击窗口外以返回",
-                      content: StatefulBuilder(
+                  AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.infoReverse,
+                      headerAnimationLoop: false,
+                      animType: AnimType.topSlide,
+                      showCloseIcon: true,
+                      closeIcon: const Icon(Icons.close_fullscreen_outlined),
+                      onDismissCallback: (type) {
+                        debugPrint('Dialog Dissmiss from callback $type');
+                      },
+                      btnCancelText: "删除书目",
+                      btnCancelOnPress: () {
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.warning,
+                          headerAnimationLoop: false,
+                          animType: AnimType.topSlide,
+                          showCloseIcon: true,
+                          closeIcon:
+                              const Icon(Icons.close_fullscreen_outlined),
+                          title: '警告',
+                          desc: '你确定要删除这本书吗?',
+                          btnCancelOnPress: () {},
+                          onDismissCallback: (type) {
+                            debugPrint('Dialog Dissmiss from callback $type');
+                          },
+                          btnCancelText: '取消',
+                          btnOkText: '删除',
+                          btnOkOnPress: () {
+                            BookApi.deleteBook(widget.bookIsbn, widget.token)
+                                .then((value) {
+                              if (value.data != null) {
+                                debugPrint(value.data.toString());
+                                Get.snackbar(value.data["msg"].toString(),
+                                    widget.bookName);
+                                widget.fieldValue("");
+                              }
+                            });
+                          },
+                        ).show();
+                      },
+                      body: StatefulBuilder(
                           builder: (BuildContext context, setState) {
                         return Padding(
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                            child: Column(
-                              children: [
-                                Text("书本名称:${widget.bookName}"),
-                                const SizedBox(
-                                  height: 10,
+                            child: Column(children: [
+                              Text("书本名称:${widget.bookName}"),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text("Isbn编码:${widget.bookIsbn}"),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              TextField(
+                                controller: _editingCurNumController,
+                                decoration: const InputDecoration(
+                                  labelText: "操作数量",
+                                  hintText: "请输入操作数",
+                                  prefixIcon: Icon(Icons.assignment_outlined),
+                                  suffixIcon: Icon(Icons.edit),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(30))),
                                 ),
-                                Text("Isbn编码:${widget.bookIsbn}"),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                TextField(
-                                  controller: _editingCurNumController,
-                                  decoration: const InputDecoration(
-                                    labelText: "操作数量",
-                                    hintText: "请输入操作数",
-                                    prefixIcon: Icon(Icons.assignment_outlined),
-                                    suffixIcon: Icon(Icons.edit),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(30))),
+                                onChanged: (value) {
+                                  setState(() => {curNum = value.toString()});
+                                },
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text("馆藏数量:$mNumber"),
+                                  const SizedBox(
+                                    width: 10,
                                   ),
-                                  onChanged: (value) {
-                                    setState(() => {curNum = value.toString()});
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    Text("馆藏数量:$mNumber"),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    ElevatedButton(
-                                      child: const Text("添加"),
-                                      onPressed: () {
-                                        if (curTextCheck(curNum)) {
-                                          BookApi.addBook(widget.bookIsbn,
-                                                  curNum, widget.token)
-                                              .then((value) {
-                                            if (value.data != null) {
-                                              if (value.data["code"] == 200) {
-                                                widget.fieldValue("");
-
-                                                setState(() {
-                                                  mNumber =
-                                                      (int.parse(mNumber) +
-                                                              int.parse(curNum))
-                                                          .toString();
-                                                  mAvailableNumber = (int.parse(
-                                                              mAvailableNumber) +
-                                                          int.parse(curNum))
-                                                      .toString();
-                                                });
-                                                curNum = "";
-                                                _editingCurNumController
-                                                    .clear();
-                                              }
-                                              Get.snackbar(
-                                                  value.data["msg"].toString(),
-                                                  widget.bookName);
-                                            }
-                                            curNum = "";
-                                            _editingCurNumController.clear();
-                                          });
-                                        }
-                                      },
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    ElevatedButton(
-                                      child: const Text("删除"),
-                                      onPressed: () {
-                                        if (curTextCheck(curNum)) {
-                                          BookApi.reduceBook(widget.bookIsbn,
-                                                  curNum, widget.token)
-                                              .then((value) {
-                                            if (value.data != null) {
-                                              if (value.data["code"] == 200) {
-                                                widget.fieldValue("");
-                                                setState(() {
-                                                  mNumber =
-                                                      (int.parse(mNumber) -
-                                                              int.parse(curNum))
-                                                          .toString();
-                                                  mAvailableNumber = (int.parse(
-                                                              mAvailableNumber) -
-                                                          int.parse(curNum))
-                                                      .toString();
-                                                });
-                                                curNum = "";
-                                                _editingCurNumController
-                                                    .clear();
-                                              }
-                                              Get.snackbar(
-                                                  value.data["msg"].toString(),
-                                                  widget.bookName);
-                                            }
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    Text("可借数量:$mAvailableNumber"),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    ElevatedButton(
-                                      child: const Text("归还"),
-                                      onPressed: () {
-                                        if (curTextCheck(curNum)) {
-                                          BookApi.returnBook(widget.bookIsbn,
-                                                  curNum, widget.token)
-                                              .then((value) {
-                                            if (value.data != null) {
-                                              if (value.data["code"] == 200) {
-                                                widget.fieldValue("");
-                                                setState(() {
-                                                  mAvailableNumber = (int.parse(
-                                                              mAvailableNumber) +
-                                                          int.parse(curNum))
-                                                      .toString();
-                                                });
-                                                curNum = "";
-                                                _editingCurNumController
-                                                    .clear();
-                                              }
-                                              Get.snackbar(
-                                                  value.data["msg"].toString(),
-                                                  widget.bookName);
-                                            }
-                                          });
-                                        }
-                                      },
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    ElevatedButton(
-                                      child: const Text("借出"),
-                                      onPressed: () {
-                                        if (curTextCheck(curNum)) {
-                                          BookApi.rentBook(widget.bookIsbn,
-                                                  curNum, widget.token)
-                                              .then((value) {
-                                            debugPrint(value.data.toString());
-                                            if (value.data != null) {
-                                              if (value.data["code"] == 200) {
-                                                widget.fieldValue("");
-                                                setState(() {
-                                                  mAvailableNumber = (int.parse(
-                                                              mAvailableNumber) -
-                                                          int.parse(curNum))
-                                                      .toString();
-                                                });
-                                                curNum = "";
-                                                _editingCurNumController
-                                                    .clear();
-                                              }
-                                              Get.snackbar(
-                                                  value.data["msg"].toString(),
-                                                  widget.bookName);
-                                            }
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                ElevatedButton(
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.red)),
+                                  ElevatedButton(
+                                    child: const Text("添加"),
                                     onPressed: () {
-                                      Get.defaultDialog(
-                                        title: "确认要删除这本书吗",
-                                        middleText: "点击框外返回",
-                                        confirm: ElevatedButton(
-                                            style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Colors.red)),
-                                            onPressed: () {
-                                              BookApi.deleteBook(
-                                                      widget.bookIsbn,
-                                                      widget.token)
-                                                  .then((value) {
-                                                if (value.data != null) {
-                                                  debugPrint(
-                                                      value.data.toString());
-                                                  Get.snackbar(
-                                                      value.data["msg"]
-                                                          .toString(),
-                                                      widget.bookName);
-                                                  widget.fieldValue("");
-                                                }
+                                      if (curTextCheck(curNum)) {
+                                        BookApi.addBook(widget.bookIsbn, curNum,
+                                                widget.token)
+                                            .then((value) {
+                                          if (value.data != null) {
+                                            if (value.data["code"] == 200) {
+                                              widget.fieldValue("");
+
+                                              setState(() {
+                                                mNumber = (int.parse(mNumber) +
+                                                        int.parse(curNum))
+                                                    .toString();
+                                                mAvailableNumber = (int.parse(
+                                                            mAvailableNumber) +
+                                                        int.parse(curNum))
+                                                    .toString();
                                               });
-                                            },
-                                            child: const Text(
-                                              "删除书目",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            )),
-                                        // onConfirm: () {
-                                        //   BookApi.deleteBook(
-                                        //           widget.bookIsbn, widget.token)
-                                        //       .then((value) {
-                                        //     if (value.data != null) {
-                                        //       debugPrint(value.data.toString());
-                                        //       Get.snackbar(
-                                        //           value.data["msg"].toString(),
-                                        //           widget.bookName);
-                                        //       widget.fieldValue("");
-                                        //     }
-                                        //   });
-                                        // }
-                                      );
+                                              curNum = "";
+                                              _editingCurNumController.clear();
+                                            }
+                                            Get.snackbar(
+                                                value.data["msg"].toString(),
+                                                widget.bookName);
+                                          }
+                                          curNum = "";
+                                          _editingCurNumController.clear();
+                                        });
+                                      }
                                     },
-                                    child: const Text(
-                                      "删除书目",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    )),
-                              ],
-                            ));
-                      }));
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  ElevatedButton(
+                                    child: const Text("删除"),
+                                    onPressed: () {
+                                      if (curTextCheck(curNum)) {
+                                        BookApi.reduceBook(widget.bookIsbn,
+                                                curNum, widget.token)
+                                            .then((value) {
+                                          if (value.data != null) {
+                                            if (value.data["code"] == 200) {
+                                              widget.fieldValue("");
+                                              setState(() {
+                                                mNumber = (int.parse(mNumber) -
+                                                        int.parse(curNum))
+                                                    .toString();
+                                                mAvailableNumber = (int.parse(
+                                                            mAvailableNumber) -
+                                                        int.parse(curNum))
+                                                    .toString();
+                                              });
+                                              curNum = "";
+                                              _editingCurNumController.clear();
+                                            }
+                                            Get.snackbar(
+                                                value.data["msg"].toString(),
+                                                widget.bookName);
+                                          }
+                                        });
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text("可借数量:$mAvailableNumber"),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  ElevatedButton(
+                                    child: const Text("归还"),
+                                    onPressed: () {
+                                      if (curTextCheck(curNum)) {
+                                        BookApi.returnBook(widget.bookIsbn,
+                                                curNum, widget.token)
+                                            .then((value) {
+                                          if (value.data != null) {
+                                            if (value.data["code"] == 200) {
+                                              widget.fieldValue("");
+                                              setState(() {
+                                                mAvailableNumber = (int.parse(
+                                                            mAvailableNumber) +
+                                                        int.parse(curNum))
+                                                    .toString();
+                                              });
+                                              curNum = "";
+                                              _editingCurNumController.clear();
+                                            }
+                                            Get.snackbar(
+                                                value.data["msg"].toString(),
+                                                widget.bookName);
+                                          }
+                                        });
+                                      }
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  ElevatedButton(
+                                    child: const Text("借出"),
+                                    onPressed: () {
+                                      if (curTextCheck(curNum)) {
+                                        BookApi.rentBook(widget.bookIsbn,
+                                                curNum, widget.token)
+                                            .then((value) {
+                                          debugPrint(value.data.toString());
+                                          if (value.data != null) {
+                                            if (value.data["code"] == 200) {
+                                              widget.fieldValue("");
+                                              setState(() {
+                                                mAvailableNumber = (int.parse(
+                                                            mAvailableNumber) -
+                                                        int.parse(curNum))
+                                                    .toString();
+                                              });
+                                              curNum = "";
+                                              _editingCurNumController.clear();
+                                            }
+                                            Get.snackbar(
+                                                value.data["msg"].toString(),
+                                                widget.bookName);
+                                          }
+                                        });
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ]));
+                      })).show();
+
+                  // Get.defaultDialog(
+                  //     title: '书本详情',
+                  //     middleText: "点击窗口外以返回",
+                  //     content: StatefulBuilder(
+                  //         builder: (BuildContext context, setState) {
+                  //       return Padding(
+                  //           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  //           child: Column(
+                  //             children: [
+                  //               Text("书本名称:${widget.bookName}"),
+                  //               const SizedBox(
+                  //                 height: 10,
+                  //               ),
+                  //               Text("Isbn编码:${widget.bookIsbn}"),
+                  //               const SizedBox(
+                  //                 height: 10,
+                  //               ),
+                  //               TextField(
+                  //                 controller: _editingCurNumController,
+                  //                 decoration: const InputDecoration(
+                  //                   labelText: "操作数量",
+                  //                   hintText: "请输入操作数",
+                  //                   prefixIcon: Icon(Icons.assignment_outlined),
+                  //                   suffixIcon: Icon(Icons.edit),
+                  //                   border: OutlineInputBorder(
+                  //                       borderRadius: BorderRadius.all(
+                  //                           Radius.circular(30))),
+                  //                 ),
+                  //                 onChanged: (value) {
+                  //                   setState(() => {curNum = value.toString()});
+                  //                 },
+                  //               ),
+                  //               const SizedBox(
+                  //                 height: 10,
+                  //               ),
+                  //               Row(
+                  //                 children: [
+                  //                   Text("馆藏数量:$mNumber"),
+                  //                   const SizedBox(
+                  //                     width: 10,
+                  //                   ),
+                  //                   ElevatedButton(
+                  //                     child: const Text("添加"),
+                  //                     onPressed: () {
+                  //                       if (curTextCheck(curNum)) {
+                  //                         BookApi.addBook(widget.bookIsbn,
+                  //                                 curNum, widget.token)
+                  //                             .then((value) {
+                  //                           if (value.data != null) {
+                  //                             if (value.data["code"] == 200) {
+                  //                               widget.fieldValue("");
+
+                  //                               setState(() {
+                  //                                 mNumber =
+                  //                                     (int.parse(mNumber) +
+                  //                                             int.parse(curNum))
+                  //                                         .toString();
+                  //                                 mAvailableNumber = (int.parse(
+                  //                                             mAvailableNumber) +
+                  //                                         int.parse(curNum))
+                  //                                     .toString();
+                  //                               });
+                  //                               curNum = "";
+                  //                               _editingCurNumController
+                  //                                   .clear();
+                  //                             }
+                  //                             Get.snackbar(
+                  //                                 value.data["msg"].toString(),
+                  //                                 widget.bookName);
+                  //                           }
+                  //                           curNum = "";
+                  //                           _editingCurNumController.clear();
+                  //                         });
+                  //                       }
+                  //                     },
+                  //                   ),
+                  //                   const SizedBox(
+                  //                     width: 10,
+                  //                   ),
+                  //                   ElevatedButton(
+                  //                     child: const Text("删除"),
+                  //                     onPressed: () {
+                  //                       if (curTextCheck(curNum)) {
+                  //                         BookApi.reduceBook(widget.bookIsbn,
+                  //                                 curNum, widget.token)
+                  //                             .then((value) {
+                  //                           if (value.data != null) {
+                  //                             if (value.data["code"] == 200) {
+                  //                               widget.fieldValue("");
+                  //                               setState(() {
+                  //                                 mNumber =
+                  //                                     (int.parse(mNumber) -
+                  //                                             int.parse(curNum))
+                  //                                         .toString();
+                  //                                 mAvailableNumber = (int.parse(
+                  //                                             mAvailableNumber) -
+                  //                                         int.parse(curNum))
+                  //                                     .toString();
+                  //                               });
+                  //                               curNum = "";
+                  //                               _editingCurNumController
+                  //                                   .clear();
+                  //                             }
+                  //                             Get.snackbar(
+                  //                                 value.data["msg"].toString(),
+                  //                                 widget.bookName);
+                  //                           }
+                  //                         });
+                  //                       }
+                  //                     },
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //               const SizedBox(
+                  //                 height: 10,
+                  //               ),
+                  //               Row(
+                  //                 children: [
+                  //                   Text("可借数量:$mAvailableNumber"),
+                  //                   const SizedBox(
+                  //                     width: 10,
+                  //                   ),
+                  //                   ElevatedButton(
+                  //                     child: const Text("归还"),
+                  //                     onPressed: () {
+                  //                       if (curTextCheck(curNum)) {
+                  //                         BookApi.returnBook(widget.bookIsbn,
+                  //                                 curNum, widget.token)
+                  //                             .then((value) {
+                  //                           if (value.data != null) {
+                  //                             if (value.data["code"] == 200) {
+                  //                               widget.fieldValue("");
+                  //                               setState(() {
+                  //                                 mAvailableNumber = (int.parse(
+                  //                                             mAvailableNumber) +
+                  //                                         int.parse(curNum))
+                  //                                     .toString();
+                  //                               });
+                  //                               curNum = "";
+                  //                               _editingCurNumController
+                  //                                   .clear();
+                  //                             }
+                  //                             Get.snackbar(
+                  //                                 value.data["msg"].toString(),
+                  //                                 widget.bookName);
+                  //                           }
+                  //                         });
+                  //                       }
+                  //                     },
+                  //                   ),
+                  //                   const SizedBox(
+                  //                     width: 10,
+                  //                   ),
+                  //                   ElevatedButton(
+                  //                     child: const Text("借出"),
+                  //                     onPressed: () {
+                  //                       if (curTextCheck(curNum)) {
+                  //                         BookApi.rentBook(widget.bookIsbn,
+                  //                                 curNum, widget.token)
+                  //                             .then((value) {
+                  //                           debugPrint(value.data.toString());
+                  //                           if (value.data != null) {
+                  //                             if (value.data["code"] == 200) {
+                  //                               widget.fieldValue("");
+                  //                               setState(() {
+                  //                                 mAvailableNumber = (int.parse(
+                  //                                             mAvailableNumber) -
+                  //                                         int.parse(curNum))
+                  //                                     .toString();
+                  //                               });
+                  //                               curNum = "";
+                  //                               _editingCurNumController
+                  //                                   .clear();
+                  //                             }
+                  //                             Get.snackbar(
+                  //                                 value.data["msg"].toString(),
+                  //                                 widget.bookName);
+                  //                           }
+                  //                         });
+                  //                       }
+                  //                     },
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //               const SizedBox(
+                  //                 height: 10,
+                  //               ),
+                  //               ElevatedButton(
+                  //                   style: ButtonStyle(
+                  //                       backgroundColor:
+                  //                           MaterialStateProperty.all(
+                  //                               Colors.red)),
+                  //                   onPressed: () {
+
+                  //                     Get.defaultDialog(
+                  //                       title: "确认要删除这本书吗",
+                  //                       middleText: "点击框外返回",
+                  //                       confirm: ElevatedButton(
+                  //                           style: ButtonStyle(
+                  //                               backgroundColor:
+                  //                                   MaterialStateProperty.all(
+                  //                                       Colors.red)),
+                  //                           onPressed: () {
+                  //                             BookApi.deleteBook(
+                  //                                     widget.bookIsbn,
+                  //                                     widget.token)
+                  //                                 .then((value) {
+                  //                               if (value.data != null) {
+                  //                                 debugPrint(
+                  //                                     value.data.toString());
+                  //                                 Get.snackbar(
+                  //                                     value.data["msg"]
+                  //                                         .toString(),
+                  //                                     widget.bookName);
+                  //                                 widget.fieldValue("");
+                  //                               }
+                  //                             });
+                  //                           },
+                  //                           child: const Text(
+                  //                             "删除书目",
+                  //                             style: TextStyle(
+                  //                               color: Colors.white,
+                  //                             ),
+                  //                           )),
+                  //                       // onConfirm: () {
+                  //                       //   BookApi.deleteBook(
+                  //                       //           widget.bookIsbn, widget.token)
+                  //                       //       .then((value) {
+                  //                       //     if (value.data != null) {
+                  //                       //       debugPrint(value.data.toString());
+                  //                       //       Get.snackbar(
+                  //                       //           value.data["msg"].toString(),
+                  //                       //           widget.bookName);
+                  //                       //       widget.fieldValue("");
+                  //                       //     }
+                  //                       //   });
+                  //                       // }
+                  //                     );
+                  //                   },
+                  //                   child: const Text(
+                  //                     "删除书目",
+                  //                     style: TextStyle(
+                  //                       color: Colors.white,
+                  //                     ),
+                  //                   )),
+                  //             ],
+                  //           ));
+                  //     }));
                 },
                 child: Row(
                     mainAxisSize: MainAxisSize.max,
