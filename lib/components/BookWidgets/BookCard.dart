@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:graduation_project/api/BookApi.dart';
+import 'package:graduation_project/utils/utils.dart';
 
 class BookCard extends StatefulWidget {
   const BookCard(
@@ -19,21 +20,31 @@ class BookCard extends StatefulWidget {
   final String bookIsbn;
   final String token;
   final ValueChanged<String> fieldValue;
+
   @override
   State<BookCard> createState() => _BookCardState();
 }
 
 class _BookCardState extends State<BookCard> {
-  String mNumber = "";
-  String mAvailableNumber = "";
-
+  // String mNumber = "";
+  // String mAvailableNumber = "";
+  String curNum = "";
+  final TextEditingController _editingCurNumController =
+      TextEditingController();
   @override
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      mNumber = widget.number;
-      mAvailableNumber = widget.availableNumber;
+      // mNumber = widget.number;
+      // mAvailableNumber = widget.availableNumber;
     });
+  }
+
+  bool curTextCheck(String str) {
+    if (str == "" && !Utils.isNumeric(str)) {
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -68,7 +79,7 @@ class _BookCardState extends State<BookCard> {
                       content: StatefulBuilder(
                           builder: (BuildContext context, setState) {
                         return Padding(
-                            padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                             child: Column(
                               children: [
                                 Text("书本名称:${widget.bookName}"),
@@ -79,36 +90,63 @@ class _BookCardState extends State<BookCard> {
                                 const SizedBox(
                                   height: 10,
                                 ),
+                                TextField(
+                                  controller: _editingCurNumController,
+                                  decoration: const InputDecoration(
+                                    labelText: "操作数量",
+                                    hintText: "请输入操作数",
+                                    prefixIcon: Icon(Icons.menu_book_outlined),
+                                    suffixIcon: Icon(Icons.edit),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(30))),
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() => {curNum = value.toString()});
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 Row(
                                   children: [
-                                    Text("馆藏数量:$mNumber"),
+                                    const Text("馆藏数量:"),
                                     const SizedBox(
                                       width: 10,
                                     ),
                                     ElevatedButton(
                                       child: const Text("添加"),
                                       onPressed: () {
-                                        BookApi.addBook(widget.bookIsbn, "1",
-                                                widget.token)
-                                            .then((value) {
-                                          if (value.data != null) {
-                                            if (value.data["code"] == 200) {
-                                              widget.fieldValue("");
-                                              setState(() {
-                                                mNumber =
-                                                    (int.parse(mNumber) + 1)
-                                                        .toString();
-                                                mAvailableNumber = (int.parse(
-                                                            mAvailableNumber) +
-                                                        1)
-                                                    .toString();
-                                              });
+                                        if (curTextCheck(curNum)) {
+                                          BookApi.addBook(widget.bookIsbn,
+                                                  curNum, widget.token)
+                                              .then((value) {
+                                            if (value.data != null) {
+                                              if (value.data["code"] == 200) {
+                                                widget.fieldValue("");
+                                                // 加上后snackbar失效，且dialog更新失败，具观测发现在这次setstate()后的所有setstate都将失效
+                                                // setState(() {
+                                                //   mNumber = (int.parse(
+                                                //               mNumber) +
+                                                //           int.parse(curNum) +
+                                                //           1 -
+                                                //           1)
+                                                //       .toString();
+                                                //   mAvailableNumber = (int.parse(
+                                                //               mAvailableNumber) +
+                                                //           int.parse(curNum) +
+                                                //           0)
+                                                //       .toString();
+                                                // });
+                                              }
+                                              Get.snackbar(
+                                                  value.data["msg"].toString(),
+                                                  widget.bookName);
                                             }
-                                            Get.snackbar(
-                                                value.data["msg"].toString(),
-                                                widget.bookName);
-                                          }
-                                        });
+                                          });
+                                          curNum = "";
+                                          _editingCurNumController.clear();
+                                        }
                                       },
                                     ),
                                     const SizedBox(
@@ -117,27 +155,34 @@ class _BookCardState extends State<BookCard> {
                                     ElevatedButton(
                                       child: const Text("删除"),
                                       onPressed: () {
-                                        BookApi.reduceBook(widget.bookIsbn, "1",
-                                                widget.token)
-                                            .then((value) {
-                                          if (value.data != null) {
-                                            if (value.data["code"] == 200) {
-                                              widget.fieldValue("");
-                                              setState(() {
-                                                mNumber =
-                                                    (int.parse(mNumber) - 1)
-                                                        .toString();
-                                                mAvailableNumber = (int.parse(
-                                                            mAvailableNumber) -
-                                                        1)
-                                                    .toString();
-                                              });
+                                        if (curTextCheck(curNum)) {
+                                          BookApi.reduceBook(widget.bookIsbn,
+                                                  curNum, widget.token)
+                                              .then((value) {
+                                            if (value.data != null) {
+                                              if (value.data["code"] == 200) {
+                                                widget.fieldValue("");
+                                                // setState(() {
+                                                //   mNumber = (int.parse(
+                                                //               mNumber) -
+                                                //           int.parse(curNum) +
+                                                //           0)
+                                                //       .toString();
+                                                //   mAvailableNumber = (int.parse(
+                                                //               mAvailableNumber) -
+                                                //           int.parse(curNum) +
+                                                //           0)
+                                                //       .toString();
+                                                // });
+                                              }
+                                              Get.snackbar(
+                                                  value.data["msg"].toString(),
+                                                  widget.bookName);
                                             }
-                                            Get.snackbar(
-                                                value.data["msg"].toString(),
-                                                widget.bookName);
-                                          }
-                                        });
+                                          });
+                                          curNum = "";
+                                          _editingCurNumController.clear();
+                                        }
                                       },
                                     ),
                                   ],
@@ -147,58 +192,68 @@ class _BookCardState extends State<BookCard> {
                                 ),
                                 Row(
                                   children: [
-                                    Text("可借数量:$mAvailableNumber"),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    ElevatedButton(
-                                      child: const Text("借出"),
-                                      onPressed: () {
-                                        BookApi.rentBook(widget.bookIsbn, "1",
-                                                widget.token)
-                                            .then((value) {
-                                          debugPrint(value.data.toString());
-                                          if (value.data != null) {
-                                            if (value.data["code"] == 200) {
-                                              widget.fieldValue("");
-                                              setState(() {
-                                                mAvailableNumber = (int.parse(
-                                                            mAvailableNumber) -
-                                                        1)
-                                                    .toString();
-                                              });
-                                            }
-                                            Get.snackbar(
-                                                value.data["msg"].toString(),
-                                                widget.bookName);
-                                          }
-                                        });
-                                      },
-                                    ),
+                                    const Text("可借数量:"),
                                     const SizedBox(
                                       width: 10,
                                     ),
                                     ElevatedButton(
                                       child: const Text("归还"),
                                       onPressed: () {
-                                        BookApi.returnBook(widget.bookIsbn, "1",
-                                                widget.token)
-                                            .then((value) {
-                                          if (value.data != null) {
-                                            if (value.data["code"] == 200) {
-                                              widget.fieldValue("");
-                                              setState(() {
-                                                mAvailableNumber = (int.parse(
-                                                            mAvailableNumber) +
-                                                        1)
-                                                    .toString();
-                                              });
+                                        if (curTextCheck(curNum)) {
+                                          BookApi.returnBook(widget.bookIsbn,
+                                                  curNum, widget.token)
+                                              .then((value) {
+                                            if (value.data != null) {
+                                              if (value.data["code"] == 200) {
+                                                widget.fieldValue("");
+                                                // setState(() {
+                                                //   mAvailableNumber = (int.parse(
+                                                //               mAvailableNumber) +
+                                                //           int.parse(curNum) +
+                                                //           0)
+                                                //       .toString();
+                                                // });
+                                              }
+                                              Get.snackbar(
+                                                  value.data["msg"].toString(),
+                                                  widget.bookName);
                                             }
-                                            Get.snackbar(
-                                                value.data["msg"].toString(),
-                                                widget.bookName);
-                                          }
-                                        });
+                                          });
+                                          curNum = "";
+                                          _editingCurNumController.clear();
+                                        }
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    ElevatedButton(
+                                      child: const Text("借出"),
+                                      onPressed: () {
+                                        if (curTextCheck(curNum)) {
+                                          BookApi.rentBook(widget.bookIsbn,
+                                                  curNum, widget.token)
+                                              .then((value) {
+                                            debugPrint(value.data.toString());
+                                            if (value.data != null) {
+                                              if (value.data["code"] == 200) {
+                                                widget.fieldValue("");
+                                                // setState(() {
+                                                //   mAvailableNumber = (int.parse(
+                                                //               mAvailableNumber) -
+                                                //           int.parse(curNum) +
+                                                //           0)
+                                                //       .toString();
+                                                // });
+                                              }
+                                              Get.snackbar(
+                                                  value.data["msg"].toString(),
+                                                  widget.bookName);
+                                            }
+                                          });
+                                          curNum = "";
+                                          _editingCurNumController.clear();
+                                        }
                                       },
                                     ),
                                   ],
