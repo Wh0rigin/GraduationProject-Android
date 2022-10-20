@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:graduation_project/components/BookCard.dart';
+import 'package:graduation_project/components/BookWidgets/BookCard.dart';
 import 'package:graduation_project/components/RefreshCard.dart';
-import 'package:graduation_project/components/BookSearchCard.dart';
+import 'package:graduation_project/components/BookWidgets/BookSearchCard.dart';
 
 import '../../api/BookApi.dart';
 import '../../utils/utils.dart';
@@ -177,8 +177,13 @@ class _BookPageState extends State<BookPage> {
               List books = value.data["data"]["payload"];
               for (int i = 0; i < books.length; i++) {
                 widegts.add(BookCard(
-                    bookName: books[i]["Name"],
-                    availableNumber: books[i]["AvailableNumber"]));
+                  bookName: books[i]["Name"],
+                  availableNumber: books[i]["AvailableNumber"].toString(),
+                  number: books[i]["Number"].toString(),
+                  bookIsbn: books[i]["Isbn"],
+                  fieldValue: fieldValue,
+                  token: widget.token,
+                ));
               }
             });
           }
@@ -220,9 +225,16 @@ class _BookPageState extends State<BookPage> {
               ]);
               List books = value.data["data"]["payload"];
               for (int i = 0; i < books.length; i++) {
-                widegts.add(BookCard(
+                widegts.add(
+                  BookCard(
                     bookName: books[i]["Name"],
-                    availableNumber: books[i]["AvailableNumber"]));
+                    availableNumber: books[i]["AvailableNumber"].toString(),
+                    bookIsbn: books[i]["Isbn"],
+                    number: books[i]["Number"].toString(),
+                    fieldValue: fieldValue,
+                    token: widget.token,
+                  ),
+                );
               }
             });
           }
@@ -259,8 +271,13 @@ class _BookPageState extends State<BookPage> {
               List books = value.data["data"]["payload"];
               for (int i = 0; i < books.length; i++) {
                 widegts.add(BookCard(
-                    bookName: books[i]["Name"],
-                    availableNumber: books[i]["AvailableNumber"]));
+                  bookName: books[i]["Name"],
+                  availableNumber: books[i]["AvailableNumber"].toString(),
+                  fieldValue: fieldValue,
+                  number: books[i]["Number"].toString(),
+                  bookIsbn: books[i]["Isbn"],
+                  token: widget.token,
+                ));
               }
             });
           }

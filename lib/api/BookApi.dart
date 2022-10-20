@@ -52,4 +52,84 @@ class BookApi {
             data: formData);
     return response;
   }
+
+  static Future<Response> deleteBook(String isbn, String token) async {
+    var formData = FormData.fromMap({'isbn': isbn});
+    debugPrint(
+        "Delete->http://${Configs.host}:${Configs.port}/api/book/delete");
+    Response response;
+    response = await Dio()
+        .delete("http://${Configs.host}:${Configs.port}/api/book/delete",
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $token',
+            }),
+            data: formData);
+    return response;
+  }
+
+  static Future<Response> addBook(
+      String isbn, String number, String token) async {
+    var formData = FormData.fromMap({'isbn': isbn, 'number': number});
+    debugPrint("Post->http://${Configs.host}:${Configs.port}/api/book/add");
+    Response response;
+    response =
+        await Dio().post("http://${Configs.host}:${Configs.port}/api/book/add",
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $token',
+            }),
+            data: formData);
+    return response;
+  }
+
+  static Future<Response> reduceBook(
+      String isbn, String number, String token) async {
+    var formData = FormData.fromMap({'isbn': isbn, 'number': number});
+    debugPrint("Post->http://${Configs.host}:${Configs.port}/api/book/reduce");
+    Response response;
+    response = await Dio()
+        .post("http://${Configs.host}:${Configs.port}/api/book/reduce",
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $token',
+            }),
+            data: formData);
+    return response;
+  }
+
+  static Future<Response> rentBook(
+      String isbn, String number, String token) async {
+    var formData = FormData.fromMap({'isbn': isbn, 'number': number});
+    debugPrint("Post->http://${Configs.host}:${Configs.port}/api/book/rent");
+    Response response;
+    response =
+        await Dio().post("http://${Configs.host}:${Configs.port}/api/book/rent",
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $token',
+            }),
+            data: formData);
+    return response;
+  }
+
+  static Future<Response> returnBook(
+      String isbn, String number, String token) async {
+    var formData = FormData.fromMap({'isbn': isbn, 'number': number});
+    debugPrint("Post->http://${Configs.host}:${Configs.port}/api/book/return");
+    Response response;
+    response = await Dio()
+        .post("http://${Configs.host}:${Configs.port}/api/book/return",
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $token',
+            }),
+            data: formData);
+    return response;
+  }
 }

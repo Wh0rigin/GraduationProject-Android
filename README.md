@@ -19,3 +19,6 @@ samples, guidance on mobile development, and a full API reference.
 dart doc .  
 to generate API doc
 ```
+
+
+getx -> dialog is stateless
