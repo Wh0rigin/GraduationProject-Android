@@ -26,8 +26,8 @@ class BookCard extends StatefulWidget {
 }
 
 class _BookCardState extends State<BookCard> {
-  // String mNumber = "";
-  // String mAvailableNumber = "";
+  String mNumber = "";
+  String mAvailableNumber = "";
   String curNum = "";
   final TextEditingController _editingCurNumController =
       TextEditingController();
@@ -35,8 +35,8 @@ class _BookCardState extends State<BookCard> {
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      // mNumber = widget.number;
-      // mAvailableNumber = widget.availableNumber;
+      mNumber = widget.number;
+      mAvailableNumber = widget.availableNumber;
     });
   }
 
@@ -110,7 +110,7 @@ class _BookCardState extends State<BookCard> {
                                 ),
                                 Row(
                                   children: [
-                                    const Text("馆藏数量:"),
+                                    Text("馆藏数量:$mNumber"),
                                     const SizedBox(
                                       width: 10,
                                     ),
@@ -124,28 +124,28 @@ class _BookCardState extends State<BookCard> {
                                             if (value.data != null) {
                                               if (value.data["code"] == 200) {
                                                 widget.fieldValue("");
-                                                // 加上后snackbar失效，且dialog更新失败，具观测发现在这次setstate()后的所有setstate都将失效
-                                                // setState(() {
-                                                //   mNumber = (int.parse(
-                                                //               mNumber) +
-                                                //           int.parse(curNum) +
-                                                //           1 -
-                                                //           1)
-                                                //       .toString();
-                                                //   mAvailableNumber = (int.parse(
-                                                //               mAvailableNumber) +
-                                                //           int.parse(curNum) +
-                                                //           0)
-                                                //       .toString();
-                                                // });
+
+                                                setState(() {
+                                                  mNumber =
+                                                      (int.parse(mNumber) +
+                                                              int.parse(curNum))
+                                                          .toString();
+                                                  mAvailableNumber = (int.parse(
+                                                              mAvailableNumber) +
+                                                          int.parse(curNum))
+                                                      .toString();
+                                                });
+                                                curNum = "";
+                                                _editingCurNumController
+                                                    .clear();
                                               }
                                               Get.snackbar(
                                                   value.data["msg"].toString(),
                                                   widget.bookName);
                                             }
+                                            curNum = "";
+                                            _editingCurNumController.clear();
                                           });
-                                          curNum = "";
-                                          _editingCurNumController.clear();
                                         }
                                       },
                                     ),
@@ -162,26 +162,27 @@ class _BookCardState extends State<BookCard> {
                                             if (value.data != null) {
                                               if (value.data["code"] == 200) {
                                                 widget.fieldValue("");
-                                                // setState(() {
-                                                //   mNumber = (int.parse(
-                                                //               mNumber) -
-                                                //           int.parse(curNum) +
-                                                //           0)
-                                                //       .toString();
-                                                //   mAvailableNumber = (int.parse(
-                                                //               mAvailableNumber) -
-                                                //           int.parse(curNum) +
-                                                //           0)
-                                                //       .toString();
-                                                // });
+                                                setState(() {
+                                                  mNumber = (int.parse(
+                                                              mNumber) -
+                                                          int.parse(curNum) +
+                                                          0)
+                                                      .toString();
+                                                  mAvailableNumber = (int.parse(
+                                                              mAvailableNumber) -
+                                                          int.parse(curNum) +
+                                                          0)
+                                                      .toString();
+                                                });
+                                                curNum = "";
+                                                _editingCurNumController
+                                                    .clear();
                                               }
                                               Get.snackbar(
                                                   value.data["msg"].toString(),
                                                   widget.bookName);
                                             }
                                           });
-                                          curNum = "";
-                                          _editingCurNumController.clear();
                                         }
                                       },
                                     ),
@@ -192,7 +193,7 @@ class _BookCardState extends State<BookCard> {
                                 ),
                                 Row(
                                   children: [
-                                    const Text("可借数量:"),
+                                    Text("可借数量:$mAvailableNumber"),
                                     const SizedBox(
                                       width: 10,
                                     ),
@@ -206,21 +207,21 @@ class _BookCardState extends State<BookCard> {
                                             if (value.data != null) {
                                               if (value.data["code"] == 200) {
                                                 widget.fieldValue("");
-                                                // setState(() {
-                                                //   mAvailableNumber = (int.parse(
-                                                //               mAvailableNumber) +
-                                                //           int.parse(curNum) +
-                                                //           0)
-                                                //       .toString();
-                                                // });
+                                                setState(() {
+                                                  mAvailableNumber = (int.parse(
+                                                              mAvailableNumber) +
+                                                          int.parse(curNum))
+                                                      .toString();
+                                                });
+                                                curNum = "";
+                                                _editingCurNumController
+                                                    .clear();
                                               }
                                               Get.snackbar(
                                                   value.data["msg"].toString(),
                                                   widget.bookName);
                                             }
                                           });
-                                          curNum = "";
-                                          _editingCurNumController.clear();
                                         }
                                       },
                                     ),
@@ -238,21 +239,22 @@ class _BookCardState extends State<BookCard> {
                                             if (value.data != null) {
                                               if (value.data["code"] == 200) {
                                                 widget.fieldValue("");
-                                                // setState(() {
-                                                //   mAvailableNumber = (int.parse(
-                                                //               mAvailableNumber) -
-                                                //           int.parse(curNum) +
-                                                //           0)
-                                                //       .toString();
-                                                // });
+                                                setState(() {
+                                                  mAvailableNumber = (int.parse(
+                                                              mAvailableNumber) -
+                                                          int.parse(curNum) +
+                                                          0)
+                                                      .toString();
+                                                });
+                                                curNum = "";
+                                                _editingCurNumController
+                                                    .clear();
                                               }
                                               Get.snackbar(
                                                   value.data["msg"].toString(),
                                                   widget.bookName);
                                             }
                                           });
-                                          curNum = "";
-                                          _editingCurNumController.clear();
                                         }
                                       },
                                     ),
