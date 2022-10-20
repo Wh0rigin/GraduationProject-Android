@@ -95,7 +95,7 @@ class _BookCardState extends State<BookCard> {
                                   decoration: const InputDecoration(
                                     labelText: "操作数量",
                                     hintText: "请输入操作数",
-                                    prefixIcon: Icon(Icons.menu_book_outlined),
+                                    prefixIcon: Icon(Icons.assignment_outlined),
                                     suffixIcon: Icon(Icons.edit),
                                     border: OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
@@ -163,15 +163,13 @@ class _BookCardState extends State<BookCard> {
                                               if (value.data["code"] == 200) {
                                                 widget.fieldValue("");
                                                 setState(() {
-                                                  mNumber = (int.parse(
-                                                              mNumber) -
-                                                          int.parse(curNum) +
-                                                          0)
-                                                      .toString();
+                                                  mNumber =
+                                                      (int.parse(mNumber) -
+                                                              int.parse(curNum))
+                                                          .toString();
                                                   mAvailableNumber = (int.parse(
                                                               mAvailableNumber) -
-                                                          int.parse(curNum) +
-                                                          0)
+                                                          int.parse(curNum))
                                                       .toString();
                                                 });
                                                 curNum = "";
@@ -242,8 +240,7 @@ class _BookCardState extends State<BookCard> {
                                                 setState(() {
                                                   mAvailableNumber = (int.parse(
                                                               mAvailableNumber) -
-                                                          int.parse(curNum) +
-                                                          0)
+                                                          int.parse(curNum))
                                                       .toString();
                                                 });
                                                 curNum = "";
