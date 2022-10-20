@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/api/ActuatorApi.dart';
-
-import '../api/SensorApi.dart';
+import 'package:graduation_project/api/SensorApi.dart';
 
 class ActuatorCard extends StatefulWidget {
   const ActuatorCard(

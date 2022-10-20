@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
-import '../../components/ActuatorCard.dart';
+import '../../components/IotWidgets/ActuatorCard.dart';
 import '../../components/RefreshCard.dart';
-import '../../components/SensorCard.dart';
+import '../../components/IotWidgets/SensorCard.dart';
 
 class SensorPage extends StatefulWidget {
   const SensorPage({super.key, required this.token});
