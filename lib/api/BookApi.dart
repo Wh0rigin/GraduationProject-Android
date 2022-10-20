@@ -31,4 +31,25 @@ class BookApi {
             }));
     return response;
   }
+
+  static Future<Response> createBook(String bookName, String bookIsbn,
+      String number, String rentNumber, String token) async {
+    debugPrint("Post->http://${Configs.host}:${Configs.port}/api/book/create");
+    Response response;
+    var formData = FormData.fromMap({
+      'name': bookName,
+      'isbn': bookIsbn,
+      'number': number,
+      'rentNumber': rentNumber
+    });
+    response = await Dio()
+        .post("http://${Configs.host}:${Configs.port}/api/book/create",
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $token',
+            }),
+            data: formData);
+    return response;
+  }
 }
