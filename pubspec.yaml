@@ -45,6 +45,7 @@ dependencies:
   yaml: ^3.1.1
   curved_navigation_bar: ^1.0.3
   awesome_dialog: ^3.0.2
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:

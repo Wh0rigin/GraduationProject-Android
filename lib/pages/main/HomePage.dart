@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/common/assets.dart';
+
+import 'package:graduation_project/components/CommonWidgets/ImagePreview/ImageCard.dart';
+import 'package:graduation_project/components/CommonWidgets/ImagePreview/PreviewList.dart';
+
+import 'package:graduation_project/components/CommonWidgets/RollTextCard.dart';
 import 'package:graduation_project/utils/utils.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,23 +23,28 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Utils.stringToColor("fcf7ea"),
-        body: Center(
+        body: Padding(
+          padding: const EdgeInsets.all(10),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Index 0: Home',
-                style: optionStyle,
+              Row(
+                children: [
+                  Expanded(
+                      flex: 1,
+                      child: RollTextCard(
+                        height: 75,
+                        textList: ['你好,用户:\n${widget.name}', '想要来畅游书本的海洋吗'],
+                      )),
+                ],
               ),
-              StatefulBuilder(
-                builder: (BuildContext context, setState) {
-                  return ElevatedButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(widget.name.toString())));
-                      },
-                      child: const Text("获取的map"));
-                },
+              const PreviewList(
+                titile: '馆内环境',
+                children: [
+                  ImageCard(imgAsset: AssetsImages.i1367107945Png),
+                  ImageCard(imgAsset: AssetsImages.i1367107945Png),
+                  ImageCard(imgAsset: AssetsImages.i1367107945Png)
+                ],
               ),
             ],
           ),

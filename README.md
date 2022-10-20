@@ -22,3 +22,6 @@ to generate API doc
 
 
 getx -> dialog is stateless
+
+
+list anim:flutter_staggered_animations

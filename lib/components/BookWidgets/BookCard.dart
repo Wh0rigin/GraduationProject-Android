@@ -30,6 +30,8 @@ class _BookCardState extends State<BookCard> {
   String mNumber = "";
   String mAvailableNumber = "";
   String curNum = "";
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
   final TextEditingController _editingCurNumController =
       TextEditingController();
   @override
@@ -119,12 +121,19 @@ class _BookCardState extends State<BookCard> {
                           builder: (BuildContext context, setState) {
                         return Padding(
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                            child: Column(children: [
-                              Text("书本名称:${widget.bookName}"),
+                            child: Center(
+                                child: Column(children: [
+                              Text(
+                                "书本名称:${widget.bookName}",
+                                style: optionStyle,
+                              ),
                               const SizedBox(
                                 height: 10,
                               ),
-                              Text("Isbn编码:${widget.bookIsbn}"),
+                              Text(
+                                "Isbn编码:${widget.bookIsbn}",
+                                style: optionStyle,
+                              ),
                               const SizedBox(
                                 height: 10,
                               ),
@@ -147,6 +156,7 @@ class _BookCardState extends State<BookCard> {
                                 height: 10,
                               ),
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text("馆藏数量:$mNumber"),
                                   const SizedBox(
@@ -224,6 +234,7 @@ class _BookCardState extends State<BookCard> {
                                 height: 10,
                               ),
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text("可借数量:$mAvailableNumber"),
                                   const SizedBox(
@@ -289,7 +300,7 @@ class _BookCardState extends State<BookCard> {
                                   ),
                                 ],
                               ),
-                            ]));
+                            ])));
                       })).show();
 
                   // Get.defaultDialog(
