@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/components/CommonWidgets/ImagePreview/HorizontalList.dart';
+import 'package:graduation_project/components/CommonWidgets/HorizontalList.dart';
 
 class PreviewList extends StatelessWidget {
   const PreviewList({super.key, required this.titile, required this.children});

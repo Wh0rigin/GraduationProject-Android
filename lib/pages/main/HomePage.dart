@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/common/assets.dart';
+import 'package:graduation_project/components/BookWidgets/SlidingWidgets/SildingList.dart';
 
 import 'package:graduation_project/components/CommonWidgets/ImagePreview/ImageCard.dart';
 import 'package:graduation_project/components/CommonWidgets/ImagePreview/PreviewList.dart';
 
 import 'package:graduation_project/components/CommonWidgets/RollTextCard.dart';
+import 'package:graduation_project/po/BookInfo.dart';
 import 'package:graduation_project/utils/utils.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,31 +25,92 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Utils.stringToColor("fcf7ea"),
-        body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        body: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                      flex: 1,
-                      child: RollTextCard(
-                        height: 75,
-                        textList: ['你好,用户:\n${widget.name}', '想要来畅游书本的海洋吗'],
-                      )),
+                  Row(
+                    children: [
+                      Expanded(
+                          flex: 1,
+                          child: RollTextCard(
+                            height: 75,
+                            textList: ['你好,用户:\n${widget.name}', '想要来畅游书本的海洋吗'],
+                          )),
+                    ],
+                  ),
+                  const PreviewList(
+                    titile: '馆内环境',
+                    children: [
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                      ImageCard(imgAsset: AssetsImages.yuki),
+                    ],
+                  ),
+                  const SildingList(bookInfos: [
+                    BookInfo(
+                        name: '素晴日',
+                        isbn: '132456654',
+                        poster: AssetsImages.yuki,
+                        intro: '每个大学生都应该拥有的圣经'),
+                    BookInfo(
+                        name: '素晴日',
+                        isbn: '132456654',
+                        poster: AssetsImages.yuki,
+                        intro: '每个大学生都应该拥有的圣经'),
+                    BookInfo(
+                        name: '素晴日',
+                        isbn: '132456654',
+                        poster: AssetsImages.yuki,
+                        intro: '每个大学生都应该拥有的圣经'),
+                    BookInfo(
+                        name: '素晴日',
+                        isbn: '132456654',
+                        poster: AssetsImages.yuki,
+                        intro: '每个大学生都应该拥有的圣经'),
+                    BookInfo(
+                        name: '素晴日',
+                        isbn: '132456654',
+                        poster: AssetsImages.yuki,
+                        intro: '每个大学生都应该拥有的圣经'),
+                    BookInfo(
+                        name: '素晴日',
+                        isbn: '132456654',
+                        poster: AssetsImages.yuki,
+                        intro: '每个大学生都应该拥有的圣经'),
+                    BookInfo(
+                        name: '素晴日',
+                        isbn: '132456654',
+                        poster: AssetsImages.yuki,
+                        intro: '每个大学生都应该拥有的圣经'),
+                  ])
                 ],
               ),
-              const PreviewList(
-                titile: '馆内环境',
-                children: [
-                  ImageCard(imgAsset: AssetsImages.i1367107945Png),
-                  ImageCard(imgAsset: AssetsImages.i1367107945Png),
-                  ImageCard(imgAsset: AssetsImages.i1367107945Png)
-                ],
-              ),
-            ],
-          ),
+            )
+          ],
         ));
   }
 }
