@@ -3,8 +3,12 @@ import 'package:graduation_project/po/BookInfo.dart';
 import 'dart:math' as math;
 
 class SlidingCard extends StatelessWidget {
-  const SlidingCard({super.key, required this.bookInfo, required this.offset});
-
+  const SlidingCard(
+      {super.key,
+      required this.bookInfo,
+      required this.offset,
+      required this.pageChage});
+  final ValueChanged<int> pageChage;
   final BookInfo bookInfo;
   final double offset;
 
@@ -12,7 +16,8 @@ class SlidingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double gauss = math.exp(-(math.pow(offset.abs() - 0.5, 2) / 0.08));
     return SizedBox(
-      width: 240,
+      width: 250,
+      height: 500,
       child: Transform.translate(
           offset: Offset(-32 * gauss * offset.sign, 0),
           child: Card(
@@ -27,7 +32,7 @@ class SlidingCard extends StatelessWidget {
                       const BorderRadius.vertical(top: Radius.circular(32)),
                   child: Image.asset(
                     bookInfo.poster,
-                    height: MediaQuery.of(context).size.height * 0.3,
+                    // height: MediaQuery.of(context).size.height * 0.35,
                     alignment: Alignment(-offset.abs(), 0),
                     fit: BoxFit.cover,
                   ),
@@ -76,6 +81,7 @@ class SlidingCard extends StatelessWidget {
                         ),
                         onPressed: () {
                           // func change nav
+                          pageChage(1);
                         },
                       )
                     ],

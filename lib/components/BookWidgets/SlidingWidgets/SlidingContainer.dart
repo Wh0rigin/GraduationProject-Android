@@ -39,7 +39,9 @@ class _SlidingContainerState extends State<SlidingContainer> {
           return SizedBox(
             width: 50,
             child: SlidingCard(
-                bookInfo: widget.bookInfos[index], offset: pageOffset - index),
+                pageChage: (value) {},
+                bookInfo: widget.bookInfos[index],
+                offset: pageOffset - index),
           );
         }),
       ),

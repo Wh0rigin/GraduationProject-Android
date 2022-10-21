@@ -54,7 +54,10 @@ class _NavFrameState extends State<NavFrame> {
       primary: true,
       body: Center(
         child: <Widget>[
-          HomePage(name: detail["data"]["username"].toString()),
+          HomePage(
+            name: detail["data"]["username"].toString(),
+            pageChage: _onItemTapped,
+          ),
           BookPage(
             token: detail["data"]["AccessToken"],
           ),
@@ -73,6 +76,7 @@ class _NavFrameState extends State<NavFrame> {
         backgroundColor: Utils.stringToColor("fcf7ea"),
         animationCurve: Curves.easeIn,
         height: 50,
+        index: _selectedIndex,
       ),
     );
   }
