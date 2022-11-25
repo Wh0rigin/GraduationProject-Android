@@ -1,27 +1,26 @@
-# graduation_project
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-```
-dart doc .  
-to generate API doc
-```
+## flutter项目 部署 
+---
 
 
-getx -> dialog is stateless
+1. flutter环境搭建
 
+    要运行flutter程序首先你需要准备以下开发环境
+    - flutter sdk
+    - Android SDK
+    - Chrome
+    - Visual Studio develop for windows
+    - Android Studio
+    - IntelliJ IDEA
 
-list anim:flutter_staggered_animations
+    在安装完flutter SDK后可以通过flutter doctor命令测试环境是否搭建成功。
+
+2. 在flutter项目的lib/config文件下修改你的服务器IP
+
+3. 进入powershell运行
+    ```
+    flutter run -d (设备名)
+    ```
+    设备名通过命令查询
+    ```
+    flutter devices
+    ```
